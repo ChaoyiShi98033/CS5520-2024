@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, TextInput, View } from 'react-native';
 import Header from './componets/Header';
+import Input from './componets/Input';
 import { useState } from 'react';
 
 export default function App() {
@@ -11,7 +12,12 @@ export default function App() {
     console.log("using is typing", changedText);
     setText(changedText);
   }
-
+  function receiveInput(data) {
+    console.log("receive input", data);
+    setText(data);
+    //use this to update the text shoowing in the
+    //Text component
+  }
 
   return (
     <View style={styles.container}>
@@ -19,11 +25,7 @@ export default function App() {
       <Header name = {appName} version = {2}>
         <Text>child 1</Text>
       </Header>
-      <TextInput 
-      style={styles.input} 
-      value={text} 
-      onChangeText={changeTextHandler} 
-      />
+      <Input inputHandler={receiveInput}/>
       <Text>{text}</Text>
     </View>
   );
