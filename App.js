@@ -7,9 +7,9 @@ import {
   Button,
   SafeAreaView,
 } from "react-native";
-import Header from "./components/Header";
+import Header from "./componets/Header";
 import { useState } from "react";
-import Input from "./components/Input";
+import Input from "./componets/Input";
 
 export default function App() {
   const appName = "My awesome app";
