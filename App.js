@@ -6,10 +6,13 @@ import {
   Text,
   Button,
   SafeAreaView,
+  ScrollView,
+  FlatList,
 } from "react-native";
 import Header from "./componets/Header";
 import { useState } from "react";
 import Input from "./componets/Input";
+import GoalItem from "./componets/GoalItem";
 
 export default function App() {
   const appName = "My awesome app";
@@ -58,19 +61,31 @@ export default function App() {
         />
       </View>
       <View style={styles.bottomView}>
-        {goals.map((goalObj)=> {
-          return (
-            <View style={styles.textContainer} key={goalObj.id}>
-            {/* { text? <Text style={styles.text}>{text}</Text> : null} */}
-            <Text style={styles.text}>{goalObj.text}</Text>
-            </View>
-          )
-        })}
-        
+        <FlatList contentContainerStyle={styles.scrollViewContent}
+          data={goals} 
+          renderItem ={({item}) => {
+            console.log(item);
+             return (
+              <GoalItem goalObj={item}/>
+            ) 
+          }}
+        />
       </View>
     </SafeAreaView>
   );
 }
+
+{/*       <ScrollView contentContainerStyle={styles.scrollViewContent}>
+        {goals.map((goalObj)=> {
+          return (
+            <View style={styles.textContainer} key={goalObj.id}>
+            { text? <Text style={styles.text}>{text}</Text> : null}
+            <Text style={styles.text}>{goalObj.text}</Text>
+            </View>
+          )
+        })}
+        </ScrollView>  */}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -91,14 +106,4 @@ const styles = StyleSheet.create({
     padding: 5,
     marginTop: 5,
   },
-  text: { 
-    textAlign: "center",
-    fontSize: 80,
-    color:"white",
-    boarderRadius: 10,
-    backgroundColor:"purple",
-   },
-   textContainer:{
-    marginTop: 25,
-   }
 });
