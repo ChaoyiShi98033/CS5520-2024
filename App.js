@@ -6,7 +6,6 @@ import {
   Text,
   Button,
   SafeAreaView,
-  ScrollView,
 } from "react-native";
 import Header from "./componets/Header";
 import { useState } from "react";
@@ -59,7 +58,6 @@ export default function App() {
         />
       </View>
       <View style={styles.bottomView}>
-        <ScrollView horizontal={true}>
         {goals.map((goalObj)=> {
           return (
             <View style={styles.textContainer} key={goalObj.id}>
@@ -68,7 +66,6 @@ export default function App() {
             </View>
           )
         })}
-        </ScrollView>
         
       </View>
     </SafeAreaView>
