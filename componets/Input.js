@@ -11,6 +11,7 @@ import React, { useState } from "react";
 
 export default function Input({ inputHandler, modalVisible, dismissModal }) {
   const [text, setText] = useState("");
+
   // callback handler
   function changeTextHandler(changedText) {
     console.log("user is typing ", changedText);
@@ -46,7 +47,7 @@ export default function Input({ inputHandler, modalVisible, dismissModal }) {
             <Button title="Cancel" onPress={cancelHandler} />
           </View>
           <View style={styles.buttonView}>
-            <Button title="Confirm" onPress={confirmHandler} />
+            <Button title="Confirm" onPress={confirmHandler} disabled={!text? true : false} />
           </View>
         </View>
       </View>
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: "#ccc",
+    backgroundColor: "#aaa",
     alignItems: "center",
     justifyContent: "center",
   },
