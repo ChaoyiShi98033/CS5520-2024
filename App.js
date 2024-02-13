@@ -25,12 +25,17 @@ export default function App () {
 
   return (
     <NavigationContainer style={styles.container}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {backgroundColor: '#929'},
+          headerTintColor: 'white',
+        }}
+      >
         <Stack.Screen
           name="Home"
           component={Home}
           options={{
-            title: 'Home',
+            headerTitle: "All My Goals",
             headerStyle: {backgroundColor: 'green'},
             headerTintColor: 'white',
             headerTitleStyle: {
@@ -39,15 +44,18 @@ export default function App () {
           }}
         />
         <Stack.Screen
-          name="Goal Details"
+          name="Details"
           component={GoalDetails}
-          options={{title: 'Goal Details'}}
+          options={({ route }) => {
+            return {
+              headerTitle: route.params ? route.params.data.text : "Details",
+            };
+          }}
         />
 
       </Stack.Navigator>
     </NavigationContainer>
   );
-
 }
 
 {
@@ -70,5 +78,4 @@ const styles = StyleSheet.create ({
     // alignItems: "center",
     justifyContent: 'center',
   },
-
 });
