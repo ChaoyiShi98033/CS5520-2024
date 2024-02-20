@@ -18,10 +18,10 @@ import GoalItem from './componets/GoalItem';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
+const Stack = createNativeStackNavigator ();
+
 export default function App () {
   //const [text, setText] = useState("");
-
-  const Stack = createNativeStackNavigator ();
 
   return (
     <NavigationContainer style={styles.container}>
@@ -36,11 +36,11 @@ export default function App () {
           component={Home}
           options={{
             headerTitle: "All My Goals",
-            headerStyle: {backgroundColor: 'green'},
+/*             headerStyle: {backgroundColor: 'green'},
             headerTintColor: 'white',
             headerTitleStyle: {
               fontWeight: 'bold',
-            },
+            }, */
           }}
         />
         <Stack.Screen

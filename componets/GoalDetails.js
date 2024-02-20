@@ -21,10 +21,19 @@ export default function GoalDetails (navigation, route) {
 
   return (
     <View>
-      <Text>
-        You are viewing details of {route.paramas.goalData.text}
-        {route.paramas.goalData.id}
-      </Text>
+      {route.params ? (
+        <Text>
+          You are viewing details of {route.params.data.text} with id{" "}
+          {route.params.data.id}
+        </Text>
+      ) : (
+        <Text> "Extra details"</Text>
+      )}
+      {warning && <Text style={{ color: "red" }}>WARNING</Text>}
+      <Button
+        title="extra details"
+        onPress={() => navigation.push("Details")}
+      />
     </View>
   );
 }
