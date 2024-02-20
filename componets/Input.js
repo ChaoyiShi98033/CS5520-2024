@@ -38,7 +38,7 @@ export default function Input({inputHandler, modalVisible, dismissModal}) {
             }}
             style={styles.image}
           />
-          <Image source={require("../assets/goal.png")} style={styles.image} />
+          <Image source={require('../assets/favicon.png')} style={styles.image} />
           <TextInput
             placeholder="Type something"
             style={styles.input}
