@@ -14,15 +14,17 @@ import GoalDetails from '../componets/GoalDetails';
 import GoalItem from '../componets/GoalItem';
 import {useState} from 'react';
 import PressableButton from "./PressableButton";
+import { database } from '../firebase-files/firebaseSetup';
 
 
 export default function Home (navigation) {
+  console.log(database);
   const appName = 'My awesome app';
   const [goals, setGoals] = useState ([]);
   const [isModalVisible, setIsModalVisible] = useState (false);
 
   function receiveInput (data) {
-    console.log ('recieve input ', data);
+    //console.log ('recieve input ', data);
     //setText(data);
     //1. define a new obj (text:..., id:...)
     //2. use Math.random() to set id
@@ -32,7 +34,7 @@ export default function Home (navigation) {
     setGoals (currentGoals => {
       return [...goals, newGoal];
     });
-    console.log (goals);
+    //console.log (goals);
 
     setIsModalVisible (false);
     //use this to update the text showing in the
