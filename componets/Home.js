@@ -13,6 +13,8 @@ import Input from '../componets/Input';
 import GoalDetails from '../componets/GoalDetails';
 import GoalItem from '../componets/GoalItem';
 import {useState} from 'react';
+import PressableButton from "./PressableButton";
+
 
 export default function Home (navigation) {
   const appName = 'My awesome app';
@@ -63,7 +65,7 @@ export default function Home (navigation) {
     // navigate to GoalDetails using navigation prop
     //We need to pass the goal data to Details page
     console.log (goalItem);
-    navigation.navigate ('Details', {GoalDetails});
+    navigation.navigate ('Details', {data: goalItem});
   }
 
   return (
@@ -72,7 +74,13 @@ export default function Home (navigation) {
         <StatusBar style="auto" />
 
         <Header name={appName} version={2} />
-        <Button title="Add a goal" onPress={() => setIsModalVisible (true)} />
+        {/* <Button title="Add a goal" onPress={() => setIsModalVisible(true)} /> */}
+        <PressableButton
+          customStyle={styles.addButton}
+          onPressFunction={() => setIsModalVisible(true)}
+        >
+          <Text style={{ fontSize: 20 }}>Add a goal</Text>
+        </PressableButton>
         <Input
           inputHandler={receiveInput}
           modalVisible={isModalVisible}
@@ -83,8 +91,7 @@ export default function Home (navigation) {
         <FlatList
           contentContainerStyle={styles.scrollViewContent}
           data={goals}
-          renderItem={({item}) => {
-            console.log (item);
+          renderItem={({ item }) => {
             return (
               <GoalItem
                 goalObj={item}
@@ -94,6 +101,15 @@ export default function Home (navigation) {
             );
           }}
         />
+        {/* <ScrollView contentContainerStyle={styles.scrollViewContent}> */}
+        {/* {goals.map((goalObj) => {
+            return (
+              <View style={styles.textContainer} key={goalObj.id}>
+                <Text style={styles.text}>{goalObj.text}</Text>
+              </View>
+            );
+          })} */}
+        {/* </ScrollView> */}
       </View>
     </SafeAreaView>
   );
@@ -111,11 +127,11 @@ const styles = StyleSheet.create ({
     alignItems: 'center',
     justifyContent: 'space-around',
   },
-  bottomView: {
-    flex: 4,
-    backgroundColor: 'lightgreen',
-    alignItems: 'center',
-    padding: 5,
-    marginTop: 5,
+  scrollViewContent: {
+    alignItems: "center",
+  },
+  bottomView: { flex: 4, backgroundColor: "#dcd" },
+  addButton: {
+    backgroundColor: "#979",
   },
 });
