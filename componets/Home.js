@@ -1,73 +1,94 @@
+import { StatusBar } from "expo-status-bar";
 import {
   StyleSheet,
-  Text,
+  TextInput,
   View,
-  SafeAreaView,
+  Text,
   Button,
+  SafeAreaView,
+  ScrollView,
   FlatList,
-} from 'react-native';
-import React from 'react';
-import {StatusBar} from 'expo-status-bar';
-import Header from '../componets/Header';
-import Input from '../componets/Input';
-import GoalDetails from '../componets/GoalDetails';
-import GoalItem from '../componets/GoalItem';
-import {useState} from 'react';
+  Alert,
+} from "react-native";
+import Header from "./Header";
+import { useState, useEffect } from "react";
+import Input from "./Input";
+import GoalItem from "./GoalItem";
 import PressableButton from "./PressableButton";
-import { database } from '../firebase-files/firebaseSetup';
-
-
-export default function Home (navigation) {
-  console.log(database);
-  const appName = 'My awesome app';
-  const [goals, setGoals] = useState ([]);
-  const [isModalVisible, setIsModalVisible] = useState (false);
-
-  function receiveInput (data) {
-    //console.log ('recieve input ', data);
-    //setText(data);
-    //1. define a new obj (text:..., id:...)
-    //2. use Math.random() to set id
-    const newGoal = {text: data, id: Math.random ()};
-    //const newArray = [...goals, newGoal];
-    //use updater function whenever we are updating state variable base on the current value
-    setGoals (currentGoals => {
-      return [...goals, newGoal];
+import { collection, onSnapshot } from "firebase/firestore";
+import { deleteFromDB, writeToDB } from "../firebase-files/firestoreHelper";
+import { database } from "../firebase-files/firebaseSetup";
+export default function Home({ navigation }) {
+  useEffect(() => {
+    // set up a listener to get realtime data from firestore - only after the first render
+    onSnapshot(collection(database, "goals"), (querySnapshot) => {
+      console.log("database", database)
+      if (querySnapshot.empty) {
+        Alert.alert("You need to add something");
+        return;
+      }
+      // loop through this querySnapshot (forEach) => a bunch of docSnapshot
+      // call .data() on each documentsnapshot
+      let newArray = [];
+      querySnapshot.forEach((doc) => {
+        // update this to also add id of doc to the newArray
+        newArray.push({ ...doc.data(), id: doc.id });
+        // store this data in a new array
+      });
+      console.log(newArray);
+      //updating the goals array with the new array
+      setGoals(newArray);
     });
-    //console.log (goals);
+  }, []);
+  const appName = "My awesome app";
+  // const [text, setText] = useState("");
+  const [goals, setGoals] = useState([]);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  function receiveInput(data) {
+    // console.log("recieve input ", data);
+    // setText(data);
+    //1. define a new object {text:.., id:..} and store data in object's text
+    // 2. use Math.random() to set the object's id
+    // const newGoal = { text: data, id: Math.random() };
+    //don't need id anymore as Firestore is assigning one automatically
+    const newGoal = { text: data };
+    // const newArray = [...goals, newGoal];
+    //setGoals (newArray)
+    //use updater function whenever we are updating state variables based on the current value
+    // setGoals((currentGoals) => [...currentGoals, newGoal]);
 
-    setIsModalVisible (false);
+    // 3. how do I add this object to goals array?
+    setIsModalVisible(false);
     //use this to update the text showing in the
     //Text component
+    writeToDB(newGoal);
+  }
+  function dismissModal() {
+    setIsModalVisible(false);
   }
 
-  function dismissModal () {
-    setIsModalVisible (false);
+  function goalDeleteHandler(deletedId) {
+    console.log("deleted ", deletedId);
+    // remove that from the goals array --> filter
+    // const updatedArray = goals.filter((goal) => {
+    //   return goal.id !== deletedId;
+    // });
+    //use updater function whenever we are updating state variables based on the current value
+
+    // setGoals(updatedArray);
+    // setGoals((currentGoals) => {
+    //   return currentGoals.filter((goal) => {
+    //     return goal.id !== deletedId;
+    //   });
+    // });
+    deleteFromDB(deletedId);
   }
 
-  function goalDeleteHandler (deletedId) {
-    console.log ('deleted', deletedId);
-    //we need to know which item was clicked? they have unique id
-    //use the id to filter the array
-    //which goal was deleted -> id
-    //remove that from the goal array -> filter
-    /*    const updateArray = goals.filter((goal) => {
-          return goal.id !== deletedId;
-        }) */
-    //setGoals(updatedArray)
-    setGoals (currentGoals => {
-      return currentGoals.filter (goal => {
-        return goal.id !== deletedId;
-      });
-    });
-  }
-
-  function goalPressHandler (goalItem) {
+  function goalPressHandler(goalItem) {
     // console.log(goalItem);
     // navigate to GoalDetails using navigation prop
     //We need to pass the goal data to Details page
-    console.log (goalItem);
-    navigation.navigate ('Details', {data: goalItem});
+    navigation.navigate("Details", { data: goalItem });
   }
 
   return (
@@ -117,17 +138,17 @@ export default function Home (navigation) {
   );
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: "white",
     // alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   topView: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'space-around',
+    alignItems: "center",
+    justifyContent: "space-around",
   },
   scrollViewContent: {
     alignItems: "center",
