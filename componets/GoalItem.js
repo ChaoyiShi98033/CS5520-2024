@@ -1,9 +1,9 @@
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import PressableButton from "./PressableButton";
 import { AntDesign } from "@expo/vector-icons";
 
-export default function GoalItem ({goalObj, deleteFunction}) {
+export default function GoalItem ({goalObj, deleteFunction, detailFunction }) {
 
     function deleteHandler() {
         deleteFunction(goalObj.id);
@@ -41,7 +41,7 @@ const styles = StyleSheet.create ({
         textAlign: "center",
         fontSize: 18,
         color:"white",
-        boarderRadius: 10,
+        //boarderRadius: 10,
         backgroundColor:"purple",
        },
     textContainer:{
