@@ -24,8 +24,8 @@ export default function Home({ navigation }) {
   useEffect(() => {
     // set up a listener to get realtime data from firestore - only after the first render
     const unsubscribe = onSnapshot(
-      qurey(collecion(firestore, "goals"), where("owner", "==", auth.currentUser.uid)),
-      //collection(database, "goals"),
+      //query(collecion(firestore, "goals"), where("owner", "==", auth.currentUser.uid)),
+      collection(database, "goals"),
       (querySnapshot) => {
         if (querySnapshot.empty) {
           Alert.alert("You need to add something");
