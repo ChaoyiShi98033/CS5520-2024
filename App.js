@@ -1,81 +1,110 @@
-import {StatusBar} from 'expo-status-bar';
-import {
-  StyleSheet,
-  TextInput,
-  View,
-  Text,
-  Button,
-  SafeAreaView,
-  ScrollView,
-  FlatList,
-} from 'react-native';
-import Header from './componets/Header';
-import {useState} from 'react';
-import Input from './componets/Input';
-import Home from './componets/Home';
-import GoalDetails from './componets/GoalDetails';
-import GoalItem from './componets/GoalItem';
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import Home from "./componets/Home";
 
-const Stack = createNativeStackNavigator ();
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import GoalDetails from "./componets/GoalDetails";
+import Signup from "./componets/Signup";
+import Login from "./componets/Login";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "./firebase-files/firebaseSetup";
+import PressableButton from "./componets/PressableButton";
+import { Ionicons, AntDesign } from "@expo/vector-icons";
+import Profile from "./componets/Profile";
 
-export default function App () {
-  //const [text, setText] = useState("");
+const Stack = createNativeStackNavigator();
+export default function App() {
+  const [userLoggedIn, setUserLoggedIn] = useState(false);
 
+  useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/auth.user
+        // const uid = user.uid;
+        setUserLoggedIn(true);
+        // ...
+      } else {
+        // User is signed out
+        // ...
+        setUserLoggedIn(false);
+      }
+    });
+  }, []);
+  const AuthStack = (
+    <>
+      <Stack.Screen name="Signup" component={Signup} />
+      <Stack.Screen name="Login" component={Login} />
+    </>
+  );
+  const AppStack = (
+    <>
+      <Stack.Screen
+        options={({ navigation }) => {
+          return {
+            headerTitle: "All My Goals",
+            headerRight: () => {
+              return (
+                <PressableButton
+                  onPressFunction={() => {
+                    navigation.navigate("Profile");
+                  }}
+                >
+                  <Ionicons name="person" size={24} color="white" />
+                </PressableButton>
+              );
+            },
+          };
+        }}
+        name="Home"
+        component={Home}
+      />
+      <Stack.Screen
+        name="Profile"
+        component={Profile}
+        options={{
+          headerRight: () => {
+            return (
+              <PressableButton
+                onPressFunction={() => {
+                  try {
+                    signOut(auth);
+                  } catch (err) {
+                    console.log(err);
+                  }
+                }}
+              >
+                <AntDesign name="logout" size={24} color="white" />
+              </PressableButton>
+            );
+          },
+        }}
+      />
+      <Stack.Screen
+        options={({ route }) => {
+          return {
+            headerTitle: route.params ? route.params.data.text : "Details",
+          };
+        }}
+        name="Details"
+        component={GoalDetails}
+      />
+    </>
+  );
   return (
-    <NavigationContainer style={styles.container}>
+    <NavigationContainer>
       <Stack.Navigator
+        initialRouteName="Signup"
         screenOptions={{
-          headerStyle: {backgroundColor: '#929'},
-          headerTintColor: 'white',
+          headerStyle: { backgroundColor: "#929" },
+          headerTintColor: "white",
         }}
       >
-        <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerTitle: "All My Goals",
-/*             headerStyle: {backgroundColor: 'green'},
-            headerTintColor: 'white',
-            headerTitleStyle: {
-              fontWeight: 'bold',
-            }, */
-          }}
-        />
-        <Stack.Screen
-          name="Details"
-          component={GoalDetails}
-          options={({ route }) => {
-            return {
-              headerTitle: route.params ? route.params.data.text : "Details",
-            };
-          }}
-        />
-
+        {userLoggedIn ? AppStack : AuthStack}
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
 
-{
-  /*       <ScrollView contentContainerStyle={styles.scrollViewContent}>
-        {goals.map((goalObj)=> {
-          return (
-            <View style={styles.textContainer} key={goalObj.id}>
-            { text? <Text style={styles.text}>{text}</Text> : null}
-            <Text style={styles.text}>{goalObj.text}</Text>
-            </View>
-          )
-        })}
-        </ScrollView>  */
-}
-
-const styles = StyleSheet.create ({
-  container: {
-    flex: 1,
-    backgroundColor: 'white',
-    // alignItems: "center",
-    justifyContent: 'center',
-  },
-});
+const styles = StyleSheet.create({});
