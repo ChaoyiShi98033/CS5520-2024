@@ -1,14 +1,19 @@
-import { collection, addDoc, doc, deleteDoc, getDocs } from "firebase/firestore";
+import {
+  collection,
+  addDoc,
+  doc,
+  deleteDoc,
+  getDocs,
+} from "firebase/firestore";
 import { database, auth } from "./firebaseSetup";
-
 
 export async function writeToDB(data, col, docId, subCol) {
   try {
     if (docId) {
       await addDoc(collection(database, col, docId, subCol), data);
     } else {
-      if (col === "goals"){
-        data = {...data, }
+      if (col === "goals") {
+        data = { ...data, owner: auth.currentUser.uid };
       }
       await addDoc(collection(database, col), data);
     }

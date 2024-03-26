@@ -6,27 +6,32 @@ import {
   Text,
   TextInput,
   View,
-} from 'react-native';
-import React, {useState} from 'react';
+} from "react-native";
+import React, { useState } from "react";
+import ImageManager from "./ImageManager";
 
-export default function Input({inputHandler, modalVisible, dismissModal}) {
-  const [text, setText] = useState ('');
-
+export default function Input({ inputHandler, modalVisible, dismissModal }) {
+  const [text, setText] = useState("");
+  const [imageURI, setImageURI] = useState("");
   // callback handler
-  function changeTextHandler (changedText) {
-    console.log ('user is typing ', changedText);
+  function changeTextHandler(changedText) {
+    // console.log("user is typing ", changedText);
 
-    setText (changedText);
+    setText(changedText);
   }
 
-  function confirmHandler () {
-    inputHandler (text);
-    setText ('');
+  function confirmHandler() {
+    inputHandler(text, imageURI);
+    setText("");
   }
-  function cancelHandler () {
-    setText ('');
+  function cancelHandler() {
+    setText("");
+
     // hide the modal
-    dismissModal ();
+    dismissModal();
+  }
+  function receiveImageURI(takenImageUri) {
+    setImageURI(takenImageUri);
   }
   return (
     <Modal visible={modalVisible} animationType="slide" transparent={true}>
@@ -38,13 +43,14 @@ export default function Input({inputHandler, modalVisible, dismissModal}) {
             }}
             style={styles.image}
           />
-          <Image source={require('../assets/favicon.png')} style={styles.image} />
+          <Image source={require("../assets/icon.png")} style={styles.image} />
           <TextInput
             placeholder="Type something"
             style={styles.input}
             value={text}
             onChangeText={changeTextHandler}
           />
+          <ImageManager receiveImageURI={receiveImageURI} />
           <View style={styles.buttonsContainer}>
             <View style={styles.buttonView}>
               <Button title="Cancel" onPress={cancelHandler} />
@@ -63,28 +69,28 @@ export default function Input({inputHandler, modalVisible, dismissModal}) {
   );
 }
 
-const styles = StyleSheet.create ({
+const styles = StyleSheet.create({
   buttonView: {
-    width: '30%',
+    width: "30%",
     margin: 5,
   },
-  buttonsContainer: {flexDirection: 'row'},
-  input: {
-    borderBottomWidth: 2,
-    borderBottomColor: 'purple',
-    width: '50%',
-  },
+
   modalView: {
-    backgroundColor: "#999",
+    backgroundColor: "#eee",
     borderRadius: 20,
     padding: "10%",
     alignItems: "center",
   },
+  buttonsContainer: { flexDirection: "row" },
+  input: {
+    borderBottomWidth: 2,
+    borderBottomColor: "purple",
+    width: "50%",
+  },
   container: {
     flex: 1,
-    backgroundColor: '#aaa',
-    alignItems: 'center',
-    justifyContent: 'center',
+    alignItems: "center",
+    justifyContent: "center",
   },
-  image: {width: 100, height: 100},
+  image: { width: 100, height: 100 },
 });
