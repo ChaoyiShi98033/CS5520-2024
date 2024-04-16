@@ -2,6 +2,7 @@ import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { auth } from "../firebase-files/firebaseSetup";
 import LocationManager from "./LocationManager";
+import NotificationManager from "./NotificationManager";
  
 export default function Profile() {
   return (
@@ -9,6 +10,8 @@ export default function Profile() {
       <Text>{auth.currentUser.uid}</Text>
       <Text>{auth.currentUser.email}</Text>
      <LocationManager/>
-     </View>
+
+<NotificationManager/> 
+    </View>
   );
 }
